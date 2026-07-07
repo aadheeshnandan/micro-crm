@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import React from 'react'
 import {
   Search,
   Pencil,
@@ -224,9 +225,8 @@ export default function ClientTable({ clients }: { clients: Client[] }) {
                 const fu = followUps[client.id]
 
                 return (
-                  <>
+                  <React.Fragment key={client.id}>
                     <tr
-                      key={client.id}
                       className={`transition-colors ${isEditing ? 'bg-violet-50/40' : 'hover:bg-slate-50/60'}`}
                     >
                       {/* Name */}
@@ -344,7 +344,7 @@ export default function ClientTable({ clients }: { clients: Client[] }) {
 
                     {/* Follow-up expandable row */}
                     {fu && (
-                      <tr key={`${client.id}-fu`} className="bg-violet-50/50">
+                      <tr className="bg-violet-50/50">
                         <td colSpan={6} className="px-5 pb-4 pt-2">
                           <div className="rounded-lg border border-violet-200/60 bg-white p-4">
                             <div className="flex items-center justify-between mb-2.5">
@@ -378,7 +378,7 @@ export default function ClientTable({ clients }: { clients: Client[] }) {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </React.Fragment>
                 )
               })}
             </tbody>
