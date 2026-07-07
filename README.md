@@ -1,5 +1,7 @@
 # Micro CRM
 
+Check it out: https://micro-crm-peach.vercel.app/dashboard
+
 A lightweight, AI-powered client management app for freelancers and solo operators. Paste inbound client messages and let AI extract structured contact details. Track leads through a simple pipeline, edit records inline, and draft professional follow-up replies — all in one dashboard.
 
 Built with **Next.js 16**, **Supabase**, and **OpenAI**.
