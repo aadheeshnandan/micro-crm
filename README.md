@@ -76,6 +76,7 @@ npm install
 
 ### Project Structure
 
+```
 src/
 ├── app/
 │ ├── login/ # Sign in / sign up page
@@ -94,3 +95,4 @@ src/
 │ │ └── server.ts # Server Supabase client (SSR cookies)
 │ └── database.types.ts # Generated Supabase types
 └── proxy.ts # Auth route protection
+```
