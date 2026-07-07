@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { Sparkles, Loader2 } from 'lucide-react'
 import { parseAndSaveClient } from '@/app/dashboard/actions'
 
 export default function MagicInput() {
@@ -20,10 +21,7 @@ export default function MagicInput() {
       try {
         const result = await parseAndSaveClient(text)
         setText('')
-        setFeedback({
-          type: 'success',
-          message: `"${result.clientName}" saved successfully.`,
-        })
+        setFeedback({ type: 'success', message: `"${result.clientName}" saved.` })
       } catch (err) {
         setFeedback({
           type: 'error',
@@ -34,39 +32,60 @@ export default function MagicInput() {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-1">Magic Input</h2>
-      <p className="text-sm text-gray-500 mb-4">
-        Paste a message or note from a client — AI will extract and save their
-        info automatically.
-      </p>
+    <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+      {/* Header strip */}
+      <div className="flex items-center gap-2.5 px-5 py-4 border-b border-slate-100">
+        <div className="flex items-center justify-center w-7 h-7 bg-violet-100 rounded-lg">
+          <Sparkles size={14} className="text-violet-600" />
+        </div>
+        <div>
+          <h2 className="text-sm font-semibold text-slate-900">Magic Input</h2>
+          <p className="text-xs text-slate-400">
+            Paste a client message — AI extracts and saves their info
+          </p>
+        </div>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="p-5 space-y-3">
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           disabled={isPending}
-          placeholder={`e.g. "Hey, I'm Sarah Chen (sarah@example.com). I need a logo redesign, ideally by next Friday."`}
-          rows={5}
-          className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm text-gray-900 placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition disabled:bg-gray-50 disabled:text-gray-400"
+          placeholder={`e.g. "Hi, I'm James (james@studio.io). Looking for a brand refresh — new logo and color palette. Would love to start by end of August."`}
+          rows={4}
+          className="w-full px-4 py-3 rounded-lg border border-slate-200 text-sm text-slate-900 placeholder-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition bg-slate-50/50 disabled:opacity-60"
         />
 
         <div className="flex items-center justify-between gap-4 min-h-[2rem]">
-          {feedback && (
+          {feedback ? (
             <p
-              className={`text-sm ${
-                feedback.type === 'success' ? 'text-green-600' : 'text-red-600'
+              className={`text-sm font-medium ${
+                feedback.type === 'success' ? 'text-emerald-600' : 'text-red-500'
               }`}
             >
+              {feedback.type === 'success' ? '✓ ' : ''}
               {feedback.message}
             </p>
+          ) : (
+            <span />
           )}
+
           <button
             type="submit"
             disabled={isPending || !text.trim()}
-            className="ml-auto px-5 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white text-sm font-medium rounded-lg transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed whitespace-nowrap"
+            className="ml-auto inline-flex items-center gap-2 px-5 py-2 bg-violet-600 hover:bg-violet-700 disabled:bg-violet-300 text-white text-sm font-semibold rounded-lg transition focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed shrink-0"
           >
-            {isPending ? 'Saving…' : 'Save Client'}
+            {isPending ? (
+              <>
+                <Loader2 size={14} className="animate-spin" />
+                Saving…
+              </>
+            ) : (
+              <>
+                <Sparkles size={14} />
+                Save Client
+              </>
+            )}
           </button>
         </div>
       </form>
