@@ -7,7 +7,7 @@ import StatsBar from '@/components/StatsBar'
 export default async function DashboardPage() {
   const supabase = await createClient()
 
-  const [{ data: { user } }, { data: clients }] = await Promise.all([
+  const [{ data: authData }, { data: clients }] = await Promise.all([
     supabase.auth.getUser(),
     supabase
       .from('clients')
@@ -15,11 +15,11 @@ export default async function DashboardPage() {
       .order('created_at', { ascending: false }),
   ])
 
+  const user = authData?.user
   const safeClients = clients ?? []
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
       <header className="sticky top-0 z-10 bg-white border-b border-slate-200/60 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -30,20 +30,23 @@ export default async function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="text-xs text-slate-400 hidden sm:block">{user?.email}</span>
-            <form action={signout}>
-              <button
-                type="submit"
-                className="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition cursor-pointer"
-              >
-                Sign out
-              </button>
-            </form>
+            {user && (
+              <>
+                <span className="text-xs text-slate-400 hidden sm:block">{user.email}</span>
+                <form action={signout}>
+                  <button
+                    type="submit"
+                    className="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition cursor-pointer"
+                  >
+                    Sign out
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       </header>
 
-      {/* Content */}
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
         <div>
           <h1 className="text-xl font-bold text-slate-900">Dashboard</h1>
