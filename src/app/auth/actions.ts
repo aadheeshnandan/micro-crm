@@ -54,3 +54,13 @@ export async function signout(): Promise<never> {
   await supabase.auth.signOut()
   redirect('/login')
 }
+
+export async function tryAnonymously(): Promise<ActionState> {
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.signInAnonymously()
+
+  if (error) return { error: error.message }
+
+  redirect('/dashboard')
+}

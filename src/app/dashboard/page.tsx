@@ -30,9 +30,16 @@ export default async function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-4">
+            {user?.is_anonymous && (
+              <span className="text-xs font-medium text-violet-600 bg-violet-50 px-2 py-1 rounded-md hidden sm:block">
+                Demo mode · data stays on this device
+              </span>
+            )}
             {user && (
               <>
-                <span className="text-xs text-slate-400 hidden sm:block">{user.email}</span>
+                {!user.is_anonymous && (
+                  <span className="text-xs text-slate-400 hidden sm:block">{user.email}</span>
+                )}
                 <form action={signout}>
                   <button
                     type="submit"

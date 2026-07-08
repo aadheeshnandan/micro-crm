@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useActionState } from 'react'
-import { login, signup } from '@/app/auth/actions'
+import { login, signup, tryAnonymously } from '@/app/auth/actions'
 
 const initial = { error: null }
 
@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [loginState, loginAction, loginPending] = useActionState(login, initial)
   const [signupState, signupAction, signupPending] = useActionState(signup, initial)
+  const [tryState, tryAction, tryPending] = useActionState(tryAnonymously, initial)
 
   const isLogin = mode === 'login'
   const action = isLogin ? loginAction : signupAction
@@ -106,6 +107,28 @@ export default function LoginPage() {
                 : isLogin
                   ? 'Sign in'
                   : 'Create account'}
+            </button>
+          </form>
+
+          <div className="flex items-center gap-3 my-5">
+            <div className="h-px flex-1 bg-slate-200" />
+            <span className="text-xs text-slate-400">or</span>
+            <div className="h-px flex-1 bg-slate-200" />
+          </div>
+
+          <form action={tryAction}>
+            {tryState?.error && (
+              <div className="flex items-start gap-2.5 p-3 mb-3 bg-red-50 border border-red-100 rounded-lg">
+                <span className="text-red-500 mt-px shrink-0">⚠</span>
+                <p className="text-sm text-red-600">{tryState.error}</p>
+              </div>
+            )}
+            <button
+              type="submit"
+              disabled={tryPending}
+              className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 disabled:bg-slate-50 text-slate-700 text-sm font-semibold rounded-lg transition focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2 cursor-pointer disabled:cursor-not-allowed"
+            >
+              {tryPending ? 'Setting up…' : 'Try it out — no account needed'}
             </button>
           </form>
         </div>
